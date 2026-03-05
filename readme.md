@@ -7,7 +7,7 @@ Mavryk Node Package
 
 1. If not already installed, install ami:
 ```sh
-wget -q https://raw.githubusercontent.com/mavryk-network/ami/master/install.sh -O /tmp/install.sh && sh /tmp/install.sh
+wget -q https://raw.githubusercontent.com/mavryk-network/application-management-interface/master/install.sh -O /tmp/install.sh && sh /tmp/install.sh
 ```
 2. Create a directory for your application. It should not be part of user home folder structure. For example, you can use `/mns/mvrk1`.
 3. Create app.json or app.hjson with the configuration you prefer, based on the mode you want to use: node, baker, or vdf. Here are examples for each: 
