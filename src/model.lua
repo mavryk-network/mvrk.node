@@ -9,7 +9,7 @@ if not _ok then
     return
 end
 
-local _downloadLinks = hjson.parse(fs.read_file("__xtz/sources.hjson"))
+local _downloadLinks = hjson.parse(fs.read_file("__mvrk/sources.hjson"))
 
 local _downlaodUrls = nil
 
@@ -32,7 +32,7 @@ am.app.set_model(
     { merge = true, overwrite = true }
 )
 
-local _services = require("__xtz.services")
+local _services = require("__mvrk.services")
 local _wantedBinaries = _services.allBinaries
 
 ---@type string[]
@@ -49,7 +49,7 @@ if util.is_array(_configuredAdditionalKeys) then
 else
     log_warn("invalid keys configuration (skipped)")
 end
-local TEZOS_LOG_LEVEL = am.app.get_configuration("TEZOS_LOG_LEVEL", "info")
+local MAVRYK_LOG_LEVEL = am.app.get_configuration("MAVRYK_LOG_LEVEL", "info")
 
 am.app.set_model(
     {
@@ -63,10 +63,10 @@ am.app.set_model(
             type(am.app.get_configuration("SERVICE_CONFIGURATION")) == "table" and am.app.get_configuration("SERVICE_CONFIGURATION") or {},
             true
         ),
-        BAKER_LOG_LEVEL = am.app.get_configuration("BAKER_LOG_LEVEL", TEZOS_LOG_LEVEL),
-        NODE_LOG_LEVEL = am.app.get_configuration("NODE_LOG_LEVEL", TEZOS_LOG_LEVEL),
-        VDF_LOG_LEVEL = am.app.get_configuration("VDF_LOG_LEVEL", TEZOS_LOG_LEVEL),
-        ACCUSER_LOG_LEVEL = am.app.get_configuration("ACCUSER_LOG_LEVEL", TEZOS_LOG_LEVEL),
+        BAKER_LOG_LEVEL = am.app.get_configuration("BAKER_LOG_LEVEL", MAVRYK_LOG_LEVEL),
+        NODE_LOG_LEVEL = am.app.get_configuration("NODE_LOG_LEVEL", MAVRYK_LOG_LEVEL),
+        VDF_LOG_LEVEL = am.app.get_configuration("VDF_LOG_LEVEL", MAVRYK_LOG_LEVEL),
+        ACCUSER_LOG_LEVEL = am.app.get_configuration("ACCUSER_LOG_LEVEL", MAVRYK_LOG_LEVEL),
         KEY_ALIASES = _keys
     },
     { merge = true, overwrite = true }

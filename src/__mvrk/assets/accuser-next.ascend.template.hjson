@@ -1,0 +1,18 @@
+{
+    executable: {{{ROOT_DIR}}}/bin/accuser-next
+    args: [
+        --remote-signer
+        {{{model.REMOTE_SIGNER_ADDR}}}
+        run
+        {{#configuration.ACCUSER_STARTUP_ARGS}}
+        {{.}}
+        {{/configuration.ACCUSER_STARTUP_ARGS}}
+    ]
+    environment: {
+        HOME: {{{ROOT_DIR}}}/data
+        MAVRYK_LOG: "* -> {{{model.ACCUSER_LOG_LEVEL}}}"
+    }
+    restart: always
+    restart_delay: 20
+    user: {{{USER}}}
+}

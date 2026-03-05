@@ -1,0 +1,8 @@
+{
+    "Description": '''
+MVRK node - rpc or baker node.
+'''
+    Links: [
+        { website: "https://mavryk.network/" }
+    ]
+}

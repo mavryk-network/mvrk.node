@@ -1,5 +1,5 @@
-## xtz.node
-Tezos Node Package
+## mvrk.node
+Mavryk Node Package
 
 *Supports node, baker and vdf mode*
 
@@ -7,52 +7,52 @@ Tezos Node Package
 
 1. If not already installed, install ami:
 ```sh
-wget -q https://raw.githubusercontent.com/alis-is/ami/master/install.sh -O /tmp/install.sh && sh /tmp/install.sh
+wget -q https://raw.githubusercontent.com/mavryk-network/ami/master/install.sh -O /tmp/install.sh && sh /tmp/install.sh
 ```
-2. Create a directory for your application. It should not be part of user home folder structure. For example, you can use `/mns/xtz1`.
+2. Create a directory for your application. It should not be part of user home folder structure. For example, you can use `/mns/mvrk1`.
 3. Create app.json or app.hjson with the configuration you prefer, based on the mode you want to use: node, baker, or vdf. Here are examples for each: 
 
 Node:
 ```hjson
 {
     id: node
-	type: xtz.node
+	type: mvrk.node
     configuration: {
         "CONFIG_FILE": { 
             "p2p": {
-                "bootstrap-peers": [ "boot.tzbeta.net", "116.202.172.21", "95.216.45.62" ],
+                "bootstrap-peers": [ "boot.mavryk.network" ],
                 "listen-addr": "[::]:9732" 
             }
         }
     }
-	user: xtznode
+	user: mvrknode
 }
 ```
 Baker:
 ```hjson
 {
     id: baker
-	type: xtz.node
+	type: mvrk.node
     configuration: {
         NODE_TYPE: baker
     }
-	user: xtzbaker
+	user: mvrkbaker
 }
 ```
 VDF:
 ```hjson
 {
     id: vdf
-	type: xtz.node
+	type: mvrk.node
     configuration: {
         NODE_TYPE: vdf
     }
-	user: xtzvdf
+	user: mvrkvdf
 }
 ```
 The above examples are for different node types. Depending on the mode, you'll need to adjust the `NODE_TYPE` fields accordingly. `CONFIG_FILE` is content of node configuration and is respected in all modes.
 
-4. Run `ami --path=<your app path> setup`, for example, `ami --path=/mns/xtz1 setup`. 
+4. Run `ami --path=<your app path> setup`, for example, `ami --path=/mns/mvrk1 setup`. 
 	- run `ami --path=<your app path> --help` to see available commands.
 5. Start your node with `ami --path=<your app path> start`.
 6. Check the node's info with `ami --path=<your app path> info`.
@@ -78,7 +78,7 @@ The above examples are for different node types. Depending on the mode, you'll n
 
 ### Troubleshooting
 
-To enable trace level printout, run `ami` with `-ll=trace`. For example: `ami --path=/mns/xtz1 -ll=trace setup`.
+To enable trace level printout, run `ami` with `-ll=trace`. For example: `ami --path=/mns/mvrk1 -ll=trace setup`.
 
 Remember to adjust the path according to your app's location.
 
@@ -86,4 +86,4 @@ Remember to adjust the path according to your app's location.
 ### Updating sources
 
 Sources can be updated with:
-`eli src/__xtz/update-sources.lua https://gitlab.com/tezos/tezos/-/packages/25835249 Proxford PtParisB`
+`eli src/__mvrk/update-sources.lua https://gitlab.com/mavryk-network/mavryk-protocol/-/packages/45650499 PtAtLas PtBoreas`

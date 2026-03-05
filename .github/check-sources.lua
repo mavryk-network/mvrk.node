@@ -1,6 +1,6 @@
 local hjson = require "hjson"
 
-local sourcesHjson = fs.read_file("src/__xtz/sources.hjson")
+local sourcesHjson = fs.read_file("src/__mvrk/sources.hjson")
 local sources = hjson.parse(sourcesHjson)
 
 local sourceUrls = {}
@@ -13,7 +13,7 @@ for _, platformSources in pairs(sources) do
 		end
 		table.insert(sourceUrls, sourceUrl)
 
-		-- https://gitlab.com/tezos/tezos/-/package_files/130339715/download
+		-- https://gitlab.com/mavryk-network/mavryk-protocol/-/package_files/228464809/download
 		-- extract id from url
 		local sourceId = sourceUrl:match("package_files/(%d+)/download")
 		if not sourceId then

@@ -1,0 +1,12 @@
+{
+    id: ascend
+    configuration: {
+        NODE_TYPE: node
+        RPC_ADDR: 0.0.0.0
+    }
+    type: {
+        id: mvrk.node
+        version: latest
+    }
+    user: ascend
+}

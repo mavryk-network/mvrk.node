@@ -1,7 +1,7 @@
 {
-    "id": "xtz.node" ,
-    "version" : "0.29.3+20.3.parisc",
+    "id": "mvrk.node" ,
+    "version" : "0.29.3+20.3.boreas",
     "dependencies": [
-        { "id":"xtz.base" }
+        { "id":"mvrk.base" }
     ]
 } 

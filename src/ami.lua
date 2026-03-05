@@ -1,10 +1,10 @@
 return {
-    title = "XTZ node",
+    title = "MVRK node",
     commands = {
         info = {
             description = "ami 'info' sub command",
             summary = "Prints runtime info and status of the app",
-            action = "__xtz/info.lua",
+            action = "__mvrk/info.lua",
             options = {
                 ["timeout"] = {
                     aliases = { "t" },
@@ -48,7 +48,7 @@ return {
                 end
 
                 if _noOptions or _options.app then
-                    am.execute_extension("__xtz/download-binaries.lua", { contextFailExitCode = EXIT_SETUP_ERROR })
+                    am.execute_extension("__mvrk/download-binaries.lua", { contextFailExitCode = EXIT_SETUP_ERROR })
                 end
 
                 if _noOptions and not _options["no-validate"] then
@@ -56,23 +56,23 @@ return {
                 end
 
                 if _noOptions or _options.configure then
-                    am.execute_extension('__xtz/create_user.lua', { contextFailExitCode = EXIT_APP_CONFIGURE_ERROR })
+                    am.execute_extension('__mvrk/create_user.lua', { contextFailExitCode = EXIT_APP_CONFIGURE_ERROR })
                     am.app.render()
-                    am.execute_extension("__xtz/configure.lua", { contextFailExitCode = EXIT_APP_CONFIGURE_ERROR })
+                    am.execute_extension("__mvrk/configure.lua", { contextFailExitCode = EXIT_APP_CONFIGURE_ERROR })
                 end
-                log_success("XTZ node setup complete.")
+                log_success("MVRK node setup complete.")
             end
         },
         start = {
             description = "ami 'start' sub command",
-            summary = "Starts the XTZ node",
-            action = "__xtz/start.lua",
+            summary = "Starts the MVRK node",
+            action = "__mvrk/start.lua",
             contextFailExitCode = EXIT_APP_START_ERROR
         },
         stop = {
             description = "ami 'stop' sub command",
-            summary = "Stops the XTZ node",
-            action = "__xtz/stop.lua",
+            summary = "Stops the MVRK node",
+            action = "__mvrk/stop.lua",
             contextFailExitCode = EXIT_APP_STOP_ERROR
         },
         validate = {
@@ -84,8 +84,8 @@ return {
                     return
                 end
                 -- //TODO: Validate platform
-                ami_assert(proc.EPROC, "xtz node AMI requires extra api - eli.proc.extra", EXIT_MISSING_API)
-                ami_assert(fs.EFS, "xtz node AMI requires extra api - eli.fs.extra", EXIT_MISSING_API)
+                ami_assert(proc.EPROC, "mvrk node AMI requires extra api - eli.proc.extra", EXIT_MISSING_API)
+                ami_assert(fs.EFS, "mvrk node AMI requires extra api - eli.fs.extra", EXIT_MISSING_API)
 
                 ami_assert(type(am.app.get("id")) == 'string', "id not specified!", EXIT_INVALID_CONFIGURATION)
                 ami_assert(type(am.app.get_configuration()) == 'table', "configuration not found in app.h/json!",
@@ -93,19 +93,19 @@ return {
                 ami_assert(type(am.app.get("user")) == 'string', "USER not specified!", EXIT_INVALID_CONFIGURATION)
                 ami_assert(type(am.app.get_type()) == "table" or type(am.app.get_type()) == "string", "Invalid app type!"
                     , EXIT_INVALID_CONFIGURATION)
-                log_success("XTZ node configuration validated.")
+                log_success("MVRK node configuration validated.")
             end
         },
         bootstrap = {
             description = "ami 'bootstrap' sub command",
-            summary = 'Bootstraps XTZ chain',
-            action = '__xtz/bootstrap.lua',
+            summary = 'Bootstraps MVRK chain',
+            action = '__mvrk/bootstrap.lua',
             type = "raw",
             contextFailExitCode = EXIT_APP_START_ERROR
         },
         client = {
             description = "ami 'client' sub command",
-            summary = "Passes any passed arguments directly to tezos-client.",
+            summary = "Passes any passed arguments directly to mavryk-client.",
             index = 8,
             type = "external",
             exec = "bin/client",
@@ -116,7 +116,7 @@ return {
         },
         node = {
             description = "ami 'node' sub command",
-            summary = "Passes any passed arguments directly to tezos-node.",
+            summary = "Passes any passed arguments directly to mavryk-node.",
             index = 9,
             type = "external",
             exec = "bin/node",
@@ -129,14 +129,14 @@ return {
             description = "ami 'import-key' sub command",
             summary = "Attempts to import ledger key (Assumes only one ledger is connected).",
             index = 10,
-            action = "__xtz/import_key.lua",
+            action = "__mvrk/import_key.lua",
             type = "raw",
             contextFailExitCode = EXIT_APP_INTERNAL_ERROR
         },
         ["list-bakers"] = {
             description = "ami 'list-bakers' sub command",
             summary = "Lists bakers this node meant to be baking for.",
-            action = "__xtz/list_bakers.lua",
+            action = "__mvrk/list_bakers.lua",
         },
         log = {
             description = "ami 'log' sub command",
@@ -162,14 +162,14 @@ return {
                 }
             },
             type = "no-command",
-            action = '__xtz/log.lua',
+            action = '__mvrk/log.lua',
             contextFailExitCode = EXIT_APP_INTERNAL_ERROR
         },
         about = {
             description = "ami 'about' sub command",
             summary = "Prints information about application",
             action = function(_options, _, _, _)
-                local _ok, _aboutFile = fs.safe_read_file("__xtz/about.hjson")
+                local _ok, _aboutFile = fs.safe_read_file("__mvrk/about.hjson")
                 ami_assert(_ok, "Failed to read about file!", EXIT_APP_ABOUT_ERROR)
 
                 local _ok, _about = hjson.safe_parse(_aboutFile)
@@ -191,10 +191,10 @@ return {
             },
             action = function(_options, _, _, _)
                 if _options.chain then
-                    am.execute_extension("__xtz/remove-chain.lua", { contextFailExitCode = EXIT_RM_ERROR })
+                    am.execute_extension("__mvrk/remove-chain.lua", { contextFailExitCode = EXIT_RM_ERROR })
                 end
                 if _options.all then
-                    am.execute_extension("__xtz/remove-all.lua", { contextFailExitCode = EXIT_RM_ERROR })
+                    am.execute_extension("__mvrk/remove-all.lua", { contextFailExitCode = EXIT_RM_ERROR })
                     am.app.remove()
                     log_success("Application removed.")
                 end

@@ -1,0 +1,16 @@
+// SOURCE: https://gitlab.com/mavryk-network/mavryk-protocol/-/releases
+// PROTOCOLS: PtBoreas
+{
+    linux-x86_64: {
+        node: https://gitlab.com/mavryk-network/mavryk-protocol/-/package_files/228464807/download
+        accuser: https://gitlab.com/mavryk-network/mavryk-protocol/-/package_files/228464808/download
+        client: https://gitlab.com/mavryk-network/mavryk-protocol/-/package_files/228464805/download
+        baker: https://gitlab.com/mavryk-network/mavryk-protocol/-/package_files/228464809/download
+    }
+    linux-arm64: {
+        node: https://gitlab.com/mavryk-network/mavryk-protocol/-/package_files/228464876/download
+        accuser: https://gitlab.com/mavryk-network/mavryk-protocol/-/package_files/228464880/download
+        client: https://gitlab.com/mavryk-network/mavryk-protocol/-/package_files/228464874/download
+        baker: https://gitlab.com/mavryk-network/mavryk-protocol/-/package_files/228464884/download
+    }
+}
