@@ -54,14 +54,14 @@ jobs:
         export PACKAGE_SOURCE=https://github.com/${{github.repository}}/releases/download/$VERSION/$ID-$VERSION.zip
         echo "PACKAGE_SOURCE=$PACKAGE_SOURCE" >> $GITHUB_OUTPUT
 
-    # - name: Air Repository Dispatch
-    #   uses: peter-evans/repository-dispatch@v3
-    #   if: ${{ steps.repository_info.outputs.NEEDS_RELEASE == 'true'}}
-    #   with:
-    #     token: ${{ secrets.AIR_ACCESS_TOKEN }}
-    #     repository: alis-is/air
-    #     event-type: app-release
-    #     client-payload: '{ "id": "${{ steps.repository_info.outputs.ID }}", "repository": "${{github.repository}}", "version": "${{steps.repository_info.outputs.VERSION}}", "package": "${{ steps.release_info.outputs.PACKAGE_SOURCE }}", "sha256": "${{ steps.release_info.outputs.SHA256 }}"}'
+    - name: Air Repository Dispatch
+      uses: peter-evans/repository-dispatch@v3
+      if: ${{ steps.repository_info.outputs.NEEDS_RELEASE == 'true'}}
+      with:
+        token: ${{ secrets.MAVRYK_AMI_ACCESS_TOKEN }}
+        repository: mavryk-network/application-image-repository
+        event-type: app-release
+        client-payload: '{ "id": "${{ steps.repository_info.outputs.ID }}", "repository": "${{github.repository}}", "version": "${{steps.repository_info.outputs.VERSION}}", "package": "${{ steps.release_info.outputs.PACKAGE_SOURCE }}", "sha256": "${{ steps.release_info.outputs.SHA256 }}"}'
 
   build-containers:
     runs-on: ubuntu-latest
