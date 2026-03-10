@@ -34,8 +34,8 @@ local tmpNodeDir = "./data/.mavryk-node-tmp"
 if not fs.exists(tmpNodeDir) and fs.exists(nodeDir) then
 	os.rename(nodeDir, tmpNodeDir)
 	fs.mkdirp(nodeDir)
-	fs.safe_copy_file(path.combine(tmpNodeDir, "config.json"), path.combine(nodeDir, "config.json"))
-	fs.safe_copy_file(path.combine(tmpNodeDir, "identity.json"), path.combine(nodeDir, "identity.json"))
+	fs.copy_file(path.combine(tmpNodeDir, "config.json"), path.combine(nodeDir, "config.json"))
+	fs.copy_file(path.combine(tmpNodeDir, "identity.json"), path.combine(nodeDir, "identity.json"))
 end
 -- make sure we have all required directories in place
 fs.mkdirp(tmpNodeDir)
@@ -52,19 +52,19 @@ local toRemovePaths = {
 	-- "peers.json",
 	-- "version.json",
 }
-local nodeDirContent = fs.read_dir(tmpNodeDir, { returnFullPaths = false, recurse = false, asDirEntries = false })
+local nodeDirContent = fs.read_dir(tmpNodeDir, { return_full_paths = false, recurse = false })
 local pathsToKeep = table.filter(nodeDirContent, function (_, v)
 	return not table.includes(toRemovePaths, v)
 end)
 
 -- bootstrap
 local _tmpFile = os.tmpname()
-local _ok, _exists = fs.safe_exists(_args[1])
-if _ok and _exists then
+local _exists = fs.exists(_args[1])
+if _exists then
 	_tmpFile = _args[1]
 else
 	log_info("Downloading " .. tostring(_args[1]) .. "...")
-	local _ok, _error = net.safe_download_file(_args[1], _tmpFile, {followRedirects = true, contentType = "binary/octet-stream", progressFunction = (function ()
+	local _ok, _error = net.download_file(_args[1], _tmpFile, {follow_redirects = true, content_type = "binary/octet-stream", progress_function = (function ()
 		local _lastWritten = 0
 		return function(total, current) 
 			local _progress = math.floor(current / total * 100)
@@ -77,7 +77,7 @@ else
 		end
 	end)()})
 	if not _ok then
-		fs.safe_remove(_tmpFile)
+		fs.remove(_tmpFile)
 		ami_error("Failed to download: " .. tostring(_error))
 	end
 end
@@ -102,11 +102,11 @@ log_info"finishing the snapshot import"
 for _, v in ipairs(pathsToKeep) do
 	os.rename(path.combine(tmpNodeDir, v --[[@as string]]), path.combine(nodeDir, v --[[@as string]]))
 end
-fs.safe_remove(tmpNodeDir, { recurse = true })
+fs.remove(tmpNodeDir, { recurse = true })
 
-local _ok, _uid = fs.safe_getuid(_user)
-ami_assert(_ok, "Failed to get " .. _user .. "uid - " .. (_uid or ""))
-local _ok, _error = fs.safe_chown("data", _uid, _uid, {recurse = true, recurseIgnoreErrors = true})
+local _uid, _err = fs.getuid(_user)
+ami_assert(_uid, "Failed to get " .. _user .. "uid - " .. tostring(_err))
+local _ok, _error = fs.chown("data", _uid, _uid, { recurse = true, recurse_ignore_errors = true })
 if not _ok then
 	ami_error("Failed to chown data - " .. tostring(_error))
 end

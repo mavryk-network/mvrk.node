@@ -1,10 +1,10 @@
 local _user = am.app.get("user")
 ami_assert(type(_user) == "string", "User not specified...", EXIT_INVALID_CONFIGURATION)
 
-local _ok, _error = fs.safe_mkdirp("data")
+local _ok, _error = fs.mkdirp("data")
 ami_assert(_ok, "failed to create data directory: ".. tostring(_error))
-local _ok, _uid = fs.safe_getuid(_user)
-ami_assert(_ok, "Failed to get " .. _user .. "uid - " .. (_uid or ""))
+local _uid, _err = fs.getuid(_user)
+ami_assert(_uid, "Failed to get " .. _user .. "uid - " .. tostring(_err))
 
 log_info("Configuring " .. am.app.get("id") .. " services...")
 
@@ -35,20 +35,20 @@ ami_assert(_ok, "Failed to fetch params: " .. tostring(_error))
 local _configFile = am.app.get_configuration("CONFIG_FILE")
 if type(_configFile) == "table" and not table.is_array(_configFile) then
 	log_info("Creating config file...")
-	fs.safe_mkdirp("./data/.mavryk-node/")
+	fs.mkdirp("./data/.mavryk-node/")
 	fs.write_file("./data/.mavryk-node/config.json", hjson.stringify_to_json(_configFile))
 elseif fs.exists("./__mvrk/node-config.json") then
-	fs.safe_mkdirp("./data/.mavryk-node/")
+	fs.mkdirp("./data/.mavryk-node/")
 	fs.copy_file("./__mvrk/node-config.json", "./data/.mavryk-node/config.json")
 end
 
 -- vote file
 local _voteFile = am.app.get_configuration("VOTE_FILE")
 local _voteFileResult = {}
-local _ok, _baselineFile = fs.safe_read_file("./__mvrk/assets/default-vote-file.json")
-if _ok then
-	local _ok, _baseline = hjson.safe_parse(_baselineFile)
-	if _ok and type(_baseline) == "table" and not table.is_array(_baseline) then
+local _baselineFile, _err = fs.read_file("./__mvrk/assets/default-vote-file.json")
+if _baselineFile then
+	local _baseline, _err = hjson.parse(_baselineFile)
+	if _baseline and type(_baseline) == "table" and not table.is_array(_baseline) then
 		_voteFileResult = _baseline
 	end
 end
@@ -60,5 +60,5 @@ end
 fs.write_file("./data/vote-file.json", hjson.stringify_to_json(_voteFileResult))
 
 -- finalize
-local _ok, _error = fs.chown(os.cwd(), _uid, _uid, {recurse = true})
+local _ok, _error = fs.chown(os.cwd(), _uid, _uid, { recurse = true, recurse_ignore_errors = true })
 ami_assert(_ok, "Failed to chown data - " .. (_error or ""))

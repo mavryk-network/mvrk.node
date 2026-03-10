@@ -169,12 +169,12 @@ return {
             description = "ami 'about' sub command",
             summary = "Prints information about application",
             action = function(_options, _, _, _)
-                local _ok, _aboutFile = fs.safe_read_file("__mvrk/about.hjson")
-                ami_assert(_ok, "Failed to read about file!", EXIT_APP_ABOUT_ERROR)
+                local _aboutFile, _err = fs.read_file("__mvrk/about.hjson")
+                ami_assert(_aboutFile, "Failed to read about file!", EXIT_APP_ABOUT_ERROR)
 
-                local _ok, _about = hjson.safe_parse(_aboutFile)
+                local _about, _err = hjson.parse(_aboutFile)
+                ami_assert(_about, "Failed to parse about file!", EXIT_APP_ABOUT_ERROR)
                 _about["App Type"] = am.app.get({ "type", "id" }, am.app.get("type"))
-                ami_assert(_ok, "Failed to parse about file!", EXIT_APP_ABOUT_ERROR)
                 if am.options.OUTPUT_FORMAT == "json" then
                     print(hjson.stringify_to_json(_about, { indent = false, skipkeys = true }))
                 else

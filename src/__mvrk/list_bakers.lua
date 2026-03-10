@@ -7,9 +7,9 @@ keys = util.merge_arrays(keys, am.app.get_configuration("additional_key_aliases"
 [ { "name": "bob", "value": "mv1..." } ]
 ]]
 
-local ok, pkhsFile = fs.safe_read_file("data/.mavryk-client/public_key_hashs")
+local pkhsFile, err = fs.read_file("data/.mavryk-client/public_key_hashs")
 local pkhs = {}
-if ok then
+if pkhsFile then
     local aliases = hjson.parse(pkhsFile)
     for _, alias in ipairs(aliases) do
         if table.includes(keys, alias.name) then

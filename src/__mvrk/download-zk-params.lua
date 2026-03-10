@@ -13,7 +13,7 @@ local function _has_valid_zk_params()
 
     for k, v in pairs(_fileHashes) do
         local _fPath = path.combine(PARAMS_DIR, k)
-        local _, _hash = fs.safe_hash_file(_fPath, { hex = true, type = "sha256" })
+        local _hash = fs.hash_file(_fPath, { hex = true })
         if _hash ~= v then
             return false
         end
@@ -26,21 +26,21 @@ local function download_zk_params()
         return true
     end
 
-    local _ok, _error = fs.safe_mkdirp(PARAMS_DIR)
+    local _ok, _error = fs.mkdirp(PARAMS_DIR)
     if not _ok then return _ok, _error end
 
     local _tmpFile = os.tmpname()
     log_trace("downloading params zip ...")
-    local _ok, _error = net.safe_download_file(DOWNLOAD_URL, _tmpFile, {followRedirects = true, showDefaultProgress = true})
+    local _ok, _error = net.download_file(DOWNLOAD_URL, _tmpFile, { follow_redirects = true, show_default_progress = true })
     if not _ok then return _ok, _error end
     log_trace("extracting params zip ...")
-    local _ok, _error = zip.safe_extract(_tmpFile, PARAMS_DIR, { flattenRootDir = true })
-    fs.safe_remove(_tmpFile)
+    local _ok, _error = zip.extract(_tmpFile, PARAMS_DIR, { flatten_root_dir = true })
+    fs.remove(_tmpFile)
     if not _ok then return _ok, _error end
 
     -- merge groth16
     local _grothFilePath = path.combine(PARAMS_DIR, "sprout-groth16.params")
-    fs.safe_remove(_grothFilePath)
+    fs.remove(_grothFilePath)
     local _grothFile, _error = io.open(_grothFilePath, "ab")
     if not _grothFile then return false, _error end
 
@@ -48,10 +48,10 @@ local function download_zk_params()
         local _partNumber = string.format(".%02d", i)
         local _partPath = _grothFilePath .. _partNumber
         log_trace("merging part " .. _partNumber .." of groth16...")
-        local _ok, _error = fs.safe_copy_file(_partPath, _grothFile)
-        fs.safe_remove(_partPath)
+        local _ok, _error = fs.copy_file(_partPath, _grothFile)
+        fs.remove(_partPath)
         if not _ok then
-            fs.safe_remove(_grothFilePath)
+            fs.remove(_grothFilePath)
             return _ok, _error
         end
     end
