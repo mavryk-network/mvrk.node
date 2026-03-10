@@ -1,6 +1,6 @@
-local _ok, _platformPlugin = am.plugin.get("platform")
-if not _ok then
-    log_error("Cannot determine platform!")
+local _platformPlugin, _err = am.plugin.get("platform")
+if not _platformPlugin then
+    log_error("Cannot determine platform!", _err)
     return
 end
 local _ok, _platform = _platformPlugin.get_platform()
