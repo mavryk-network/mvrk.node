@@ -1,6 +1,6 @@
 {
     "id": "mvrk.node" ,
-    "version" : "0.29.5+20.3.boreas",
+    "version" : "0.29.6+20.3.boreas",
     "dependencies": [
         { "id":"mvrk.base" }
     ]

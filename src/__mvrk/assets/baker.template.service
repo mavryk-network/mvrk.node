@@ -15,9 +15,9 @@ Environment="HOME={{{ROOT_DIR}}}/data"
 Environment=MAVRYK_LOG='* -> {{{model.BAKER_LOG_LEVEL}}}'
 ExecStart={{{ROOT_DIR}}}/bin/baker --remote-signer {{{model.REMOTE_SIGNER_ADDR}}} run with local node {{{ROOT_DIR}}}/data/.mavryk-node {{{model.KEY_ALIASES}}} --votefile {{{ROOT_DIR}}}/data/vote-file.json {{{configuration.BAKER_STARTUP_ARGS__CLI_ARGS}}}
 
-{{#configuration.SERVICE_CONFIGURATION_BAKER__ARRAY}}
+{{#model.SERVICE_CONFIGURATION__ARRAY}}
 {{{key}}}={{{value}}}
-{{/configuration.SERVICE_CONFIGURATION_BAKER__ARRAY}}
+{{/model.SERVICE_CONFIGURATION__ARRAY}}
 
 [Install]
 WantedBy=default.target

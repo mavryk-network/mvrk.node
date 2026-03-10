@@ -27,6 +27,9 @@ end
 
 am.app.set_model(
     {
+        SYSTEM_OS = _platform.OS,
+        SYSTEM_DISTRO = _platform.DISTRO,
+        SYSTEM_TYPE = _platform.SYSTEM_TYPE,
         DOWNLOAD_URLS = am.app.get_configuration("SOURCES", _downlaodUrls),
     },
     { merge = true, overwrite = true }

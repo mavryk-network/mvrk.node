@@ -15,9 +15,9 @@ Environment="HOME={{{ROOT_DIR}}}/data"
 Environment=MAVRYK_LOG='* -> {{{model.VDF_LOG_LEVEL}}}'
 ExecStart={{{ROOT_DIR}}}/bin/baker run vdf {{{configuration.VDF_STARTUP_ARGS__CLI_ARGS}}}
 
-{{#configuration.SERVICE_CONFIGURATION_VDF__ARRAY}}
+{{#model.SERVICE_CONFIGURATION__ARRAY}}
 {{{key}}}={{{value}}}
-{{/configuration.SERVICE_CONFIGURATION_VDF__ARRAY}}
+{{/model.SERVICE_CONFIGURATION__ARRAY}}
 
 [Install]
 WantedBy=default.target
