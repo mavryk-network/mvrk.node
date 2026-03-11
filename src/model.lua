@@ -9,20 +9,25 @@ if not _ok then
     return
 end
 
-local _downloadLinks = hjson.parse(fs.read_file("__mvrk/sources.hjson"))
+local _sourcesContent, _sourcesErr = fs.read_file("__mvrk/sources.hjson")
+ami_assert(_sourcesContent, "Failed to read sources.hjson - " .. tostring(_sourcesErr))
+local _downloadLinks = hjson.parse(_sourcesContent)
 
 local _downlaodUrls = nil
 
 if _platform.OS == "unix" then
-	_downlaodUrls = _downloadLinks["linux-x86_64"]
-    if _platform.SYSTEM_TYPE:match("[Aa]arch64") then
-        _downlaodUrls = _downloadLinks["linux-arm64"]
+    if _platform.DISTRO == "MacOS" then
+        _downlaodUrls = _downloadLinks["darwin-arm64"]
+    else
+        _downlaodUrls = _downloadLinks["linux-x86_64"]
+        if _platform.SYSTEM_TYPE:match("[Aa]arch64") then
+            _downlaodUrls = _downloadLinks["linux-arm64"]
+        end
     end
 end
 
 if _downlaodUrls == nil then
-    log_error("Platform not supported!")
-    return
+    log_warn("No download URLs found for platform: " .. tostring(_platform.OS) .. "/" .. tostring(_platform.DISTRO) .. "/" .. tostring(_platform.SYSTEM_TYPE))
 end
 
 am.app.set_model(

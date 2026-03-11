@@ -45,8 +45,8 @@ local rpcUrl = string.interpolate("http://${RPC_ADDR}:8732/", { RPC_ADDR = rpcAd
 
 local _client = net.RestClient:new(rpcUrl, { timeout = _timeout })
 if _printAll or _printChainInfo then
-	local _ok, _response = _client:safe_get("chains/main/blocks/head")
-	if _ok then
+	local _response = _client:get("chains/main/blocks/head")
+	if _response then
 		local _data = _response.data
 		local _metadata = table.get(_data, "metadata")
 		_info.chain_head = {
@@ -59,15 +59,15 @@ if _printAll or _printChainInfo then
 		}
 	end
 
-	local _ok, _response = _client:safe_get("network/connections")
-	if _ok then
+	local _response = _client:get("network/connections")
+	if _response then
 		_info.connections = #_response.data
 	end
 end
 
 if _printAll or _printChainInfo or _printSimple then
-	local _ok, _response = _client:safe_get("chains/main/is_bootstrapped")
-	if _ok then
+	local _response = _client:get("chains/main/is_bootstrapped")
+	if _response then
 		local _data = _response.data
 		_info.bootstrapped = _data.bootstrapped
 		_info.sync_state = _data.sync_state
@@ -75,12 +75,12 @@ if _printAll or _printChainInfo or _printSimple then
 end
 
 if _isBaker and (_printAll or _printVotingInfo) then
-	local _ok, _response = _client:safe_get("chains/main/blocks/head/votes/proposals")
-	if _ok then
+	local _response = _client:get("chains/main/blocks/head/votes/proposals")
+	if _response then
 		local _data = _response.data
-		if table.is_array(_data) then 
+		if table.is_array(_data) then
 			_info.voting_proposals = {}
-			for _, v in ipairs(_data) do 
+			for _, v in ipairs(_data) do
 				if #v >= 2 and type(_info.proposals) == "table" then
 					_info.proposals[v[1]] = v[2]
 				end
@@ -88,8 +88,8 @@ if _isBaker and (_printAll or _printVotingInfo) then
 		end
 	end
 
-	local _ok, _response = _client:safe_get("chains/main/blocks/head/votes/current_period")
-	if _ok then
+	local _response = _client:get("chains/main/blocks/head/votes/current_period")
+	if _response then
 		_info.voting_current_period = _response.data
 	end
 end
