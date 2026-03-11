@@ -47,17 +47,17 @@ for k, _ in pairs(_vdfServices) do
 	_vdfServiceNames[k:sub((#(_appId .. "-mvrk-") + 1))] = k
 end
 
-local _all = util.clone(_nodeServices)
-local _allNames = util.clone(_nodeServiceNames)
+local _activeServices = util.clone(_nodeServices)
+local _activeNames = util.clone(_nodeServiceNames)
 local _allBinaries = util.clone(_nodeBinaries)
 
 local _isBaker = am.app.get_configuration("NODE_TYPE") == "baker"
 if _isBaker then
 	for k, v in pairs(_bakerServiceNames) do
-		_allNames[k] = v
+		_activeNames[k] = v
 	end
 	for k, v in pairs(_bakerServices) do
-		_all[k] = v
+		_activeServices[k] = v
 	end
 	for _, v in ipairs(_bakerBinaries) do
 		if am.app.get_model({ "DOWNLOAD_URLS", v }, false) then
@@ -69,10 +69,10 @@ end
 local _isVdf = am.app.get_configuration("NODE_TYPE") == "vdf"
 if _isVdf then
 	for k, v in pairs(_vdfServiceNames) do
-		_allNames[k] = v
+		_activeNames[k] = v
 	end
 	for k, v in pairs(_vdfServices) do
-		_all[k] = v
+		_activeServices[k] = v
 	end
 	for _, v in ipairs(_vdfBinaries) do
 		if am.app.get_model({ "DOWNLOAD_URLS", v }, false) then
@@ -81,27 +81,16 @@ if _isVdf then
 	end
 end
 
--- includes potential residues
-local function _remove_all_services()
-	local serviceManager = require"__mvrk.service-manager"
-
-	local all = util.merge_arrays(table.values(_bakerServiceNames), table.values(_nodeServiceNames))
-	all = util.merge_arrays(all, table.values(_vdfServiceNames))
-	all = util.merge_arrays(all, _possibleResidue)
-
-	for _, service in ipairs(all) do
-		if type(service) ~= "string" then goto CONTINUE end
-		local _ok, _error = serviceManager.safe_remove_service(service)
-		if not _ok then
-			ami_error("Failed to remove " .. service .. ": " .. (_error or ""))
-		end
-		::CONTINUE::
-	end
-end
+---@type string[]
+local _cleanupNames = {}
+_cleanupNames = util.merge_arrays(_cleanupNames, table.values(_nodeServiceNames))
+_cleanupNames = util.merge_arrays(_cleanupNames, table.values(_bakerServiceNames))
+_cleanupNames = util.merge_arrays(_cleanupNames, table.values(_vdfServiceNames))
+_cleanupNames = util.merge_arrays(_cleanupNames, _possibleResidue)
 
 return {
-	all = _all,
-	allNames = _allNames,
+	active = _activeServices,
+	active_names = _activeNames,
 	allBinaries = _allBinaries,
-	remove_all_services = _remove_all_services
+	cleanup_names = _cleanupNames,
 }

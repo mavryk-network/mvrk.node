@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+    <key>Label</key>
+    <string>{{{ID}}}-mvrk-node</string>
+
+    <key>UserName</key>
+    <string>{{{USER}}}</string>
+    <key>GroupName</key>
+    <string>{{{USER}}}</string>
+
+    <key>ProgramArguments</key>
+    <array>
+        <string>{{{ROOT_DIR}}}/bin/node</string>
+        <string>run</string>
+        <string>--rpc-addr</string>
+        <string>{{{model.RPC_ADDR}}}</string>
+        {{#configuration.STARTUP_ARGS}}
+        <string>{{{.}}}</string>
+        {{/configuration.STARTUP_ARGS}}
+    </array>
+
+    <key>EnvironmentVariables</key>
+    <dict>
+        <key>HOME</key>
+        <string>{{{ROOT_DIR}}}/data</string>
+        <key>MAVRYK_LOG</key>
+        <string>* -> {{{model.NODE_LOG_LEVEL}}}</string>
+    </dict>
+
+    <key>WorkingDirectory</key>
+    <string>{{{ROOT_DIR}}}/data</string>
+
+    <key>KeepAlive</key>
+    <true/>
+    <key>ThrottleInterval</key>
+    <integer>1</integer>
+
+    <key>StandardOutPath</key>
+    <string>/usr/local/var/log/{{{ID}}}-mvrk-node.log</string>
+    <key>StandardErrorPath</key>
+    <string>/usr/local/var/log/{{{ID}}}-mvrk-node.log</string>
+
+    {{#model.SERVICE_CONFIGURATION__ARRAY}}
+    <key>{{{key}}}</key>
+    <string>{{{value}}}</string>
+    {{/model.SERVICE_CONFIGURATION__ARRAY}}
+</dict>
+</plist>

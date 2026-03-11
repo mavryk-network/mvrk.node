@@ -1,28 +1,12 @@
-local _user = am.app.get("user")
-ami_assert(type(_user) == "string", "User not specified...", EXIT_INVALID_CONFIGURATION)
-
 local _ok, _error = fs.mkdirp("data")
-ami_assert(_ok, "failed to create data directory: ".. tostring(_error))
-local _uid, _err = fs.getuid(_user)
-ami_assert(_uid, "Failed to get " .. _user .. "uid - " .. tostring(_err))
+ami_assert(_ok, "failed to create data directory: " .. tostring(_error))
 
 log_info("Configuring " .. am.app.get("id") .. " services...")
 
-local backend = am.app.get_configuration("backend", os.getenv("ASCEND_SERVICES") ~= nil and "ascend" or "systemd")
-
-local serviceManager = require"__mvrk.service-manager"
-local services = require"__mvrk.services"
-services.remove_all_services() -- cleanup past install
-
-for k, v in pairs(services.all) do
-	local _serviceId = k
-	local sourceFile = string.interpolate("${file}.${extension}", {
-		file = v,
-		extension = backend == "ascend" and "ascend.hjson" or "service"
-	})
-	local _ok, _error = serviceManager.safe_install_service(sourceFile, _serviceId)
-	ami_assert(_ok, "Failed to install " .. _serviceId .. ".service " .. (_error or ""))
-end
+local service_manager = require "__mvrk.service-manager"
+local services = require "__mvrk.services"
+service_manager.remove_services(services.cleanup_names) -- cleanup past install
+service_manager.install_services(services.active)
 
 log_success(am.app.get("id") .. " services configured")
 
@@ -60,5 +44,4 @@ end
 fs.write_file("./data/vote-file.json", hjson.stringify_to_json(_voteFileResult))
 
 -- finalize
-local _ok, _error = fs.chown(os.cwd(), _uid, _uid, { recurse = true, recurse_ignore_errors = true })
-ami_assert(_ok, "Failed to chown data - " .. (_error or ""))
+require "__mvrk.base_utils".setup_file_ownership()
