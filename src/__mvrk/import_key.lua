@@ -24,4 +24,4 @@ local _proc = proc.spawn("bin/client", _importArgs, {
 	wait = true,
 	env = { HOME = path.combine(os.cwd(), "data") }
 })
-ami_assert(_proc.exitcode == 0,  "Failed to import key!")
+ami_assert(_proc.exit_code == 0, "Failed to import key!")

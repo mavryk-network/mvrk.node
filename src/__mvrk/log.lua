@@ -3,12 +3,12 @@ local _options, _, args, _ = ...
 local _args = table.map(args, function(v) return v.arg end)
 local _services = require("__mvrk.services")
 
-local _toCheck = table.values(_services.allNames)
+local _toCheck = table.values(_services.active_names)
 if #_args > 0 then
     _toCheck = {}
     for _, v in ipairs(_args) do
-        if type(_services.allNames[v]) == "string" then
-            table.insert(_toCheck, _services.allNames[v])
+        if type(_services.active_names[v]) == "string" then
+            table.insert(_toCheck, _services.active_names[v])
         end
     end
 end

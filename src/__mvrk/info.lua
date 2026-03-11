@@ -32,19 +32,11 @@ end
 if _printAll or _printServiceInfo or _printSimple then
 	local _services = require"__mvrk.services"
 
-	for k, v in pairs(_services.allNames) do
-		if type(v) ~= "string" then goto CONTINUE end
-		local _ok, _status, _started = serviceManager.safe_get_service_status(v)
-		ami_assert(_ok, "Failed to get status of " .. v .. ".service " .. (_status or ""), EXIT_PLUGIN_EXEC_ERROR)
-		_info.services[k] = {
-			status = _status,
-			started = _started
-		}
-		if _status ~= "running" then 
-			_info.status = "One or more baker services is not running"
-			_info.level = "error"
-		end
-		::CONTINUE::
+	local statuses, all_running = serviceManager.get_services_status(_services.active_names)
+	_info.services = statuses
+	if not all_running then
+		_info.status = "One or more baker services is not running"
+		_info.level = "error"
 	end
 end
 
@@ -120,5 +112,5 @@ end
 if _json then
     print(hjson.stringify_to_json(_info, {indent = false}))
 else
-    print(hjson.stringify(_info, {sortKeys = true}))
+    print(hjson.stringify(_info, { sort_keys = true }))
 end

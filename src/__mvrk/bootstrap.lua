@@ -20,7 +20,7 @@ ami ... bootstrap <url> [block hash]])
 -- check if node is running
 local serviceManager = require"__mvrk.service-manager"
 local services = require"__mvrk.services"
-for k, v in pairs(services.allNames) do
+for k, v in pairs(services.active_names) do
 	if type(v) ~= "string" then goto CONTINUE end
 	local _, status, _ = serviceManager.safe_get_service_status(v)
 	ami_assert(status ~= "running", "Some of node services is running, please stop them first...")
@@ -96,7 +96,7 @@ local _proc = proc.spawn("./bin/node", importArgs, {
 	env = { HOME = path.combine(os.cwd() --[[@as string]], "data") }
 })
 os.remove(_tmpFile)
-ami_assert(_proc.exitcode == 0,  "Failed to import snapshot!")
+ami_assert(_proc.exit_code == 0, "Failed to import snapshot!")
 
 log_info"finishing the snapshot import"
 for _, v in ipairs(pathsToKeep) do
