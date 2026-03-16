@@ -133,6 +133,17 @@ return {
             type = "raw",
             contextFailExitCode = EXIT_APP_INTERNAL_ERROR
         },
+        version = {
+            description = "ami 'version' sub command",
+            summary = "Prints versions of binaries used by the app",
+            action = "__mvrk/version.lua",
+            options = {
+                all = {
+                    description = "Print version and all related versions - dependencies, binaries...",
+                    type = "boolean"
+                }
+            }
+        },
         ["list-bakers"] = {
             description = "ami 'list-bakers' sub command",
             summary = "Lists bakers this node meant to be baking for.",
@@ -161,7 +172,7 @@ return {
                     type = "string"
                 }
             },
-            type = "no-command",
+            type = "namespace",
             action = '__mvrk/log.lua',
             contextFailExitCode = EXIT_APP_INTERNAL_ERROR
         },

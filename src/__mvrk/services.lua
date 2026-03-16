@@ -24,7 +24,7 @@ local _bakerBinaries = { "accuser", "baker" }
 local _vdfBinaries = { "baker" }
 
 if am.app.get_model({ "DOWNLOAD_URLS", "baker-next" }, false) then
-	_vdfServices[ _appId .. "mvrk-vdf-next"] = am.app.get_configuration("NODE_SERVICE_FILE", "__mvrk/assets/vdf")
+	_vdfServices[ _appId .. "-mvrk-vdf-next"] = am.app.get_configuration("NODE_SERVICE_FILE", "__mvrk/assets/vdf")
 	_bakerServices[_appId .. "-mvrk-baker-next"] = am.app.get_configuration("BAKER_NEXT_SERVICE_FILE", "__mvrk/assets/baker-next")
 	table.insert(_bakerBinaries, "baker-next")
 	table.insert(_vdfBinaries, "baker-next")
