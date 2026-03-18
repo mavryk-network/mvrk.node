@@ -14,7 +14,8 @@ for _, v in ipairs(_args) do
 	end
 end
 
-local _importArgs = { "-p", "ProtoALphaALphaALphaALphaALphaALphaALphaALphaDdp3zK", "--remote-signer", am.app.get_model("REMOTE_SIGNER_ADDR", "http://127.0.0.1:20090/"), "import", "secret", "key", _alias, "remote:" .. _args[1] }
+local _signerAddr = am.app.get_model("REMOTE_SIGNER_ADDR", "http://127.0.0.1:20090/")
+local _importArgs = { "-p", "ProtoALphaALphaALphaALphaALphaALphaALphaALphaDdp3zK", "import", "secret", "key", _alias, _signerAddr .. _args[1] }
 if _force then
 	table.insert(_importArgs, "--force")
 end
